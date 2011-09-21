@@ -1,4 +1,4 @@
-require "pagespeed/version"
+require "page_speed/version"
 
 require 'json'
 require 'open-uri'
@@ -6,7 +6,7 @@ require 'open-uri'
 API_KEY = "AIzaSyB-WW7oKAfD0T9cLGMufjiWA1mtLwDd4hg"
 API_URL = "https://www.googleapis.com/pagespeedonline/v1/runPagespeed"
 
-module Pagespeed
+module PageSpeed
   class << self
     def analyze(url)
       begin
@@ -67,7 +67,7 @@ module Pagespeed
     end
 
     def show_results(url, desktop, mobile)
-      puts "Google Pagespeed for #{url}: #{desktop} (Desktop) / #{mobile} (Mobile)"
+      puts "Google Page Speed for #{url}: #{desktop} (Desktop) / #{mobile} (Mobile)"
     end
   end
 end

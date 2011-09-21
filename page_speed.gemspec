@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "pagespeed/version"
+require "page_speed/version"
 
 Gem::Specification.new do |s|
-  s.name        = "pagespeed"
-  s.version     = Pagespeed::VERSION
+  s.name        = "page_speed"
+  s.version     = PageSpeed::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Albert Bellonch"]
   s.email       = ["albert@itnig.net"]
@@ -12,11 +12,11 @@ Gem::Specification.new do |s|
   s.summary     = %q{-}
   s.description = %q{-}
 
-  s.rubyforge_project = "pagespeed"
+  s.rubyforge_project = "page_speed"
 
   s.bindir             = 'bin'
-  s.executables        = ['pagespeed']
-  s.default_executable = 'pagespeed'
+  s.executables        = ['page_speed']
+  s.default_executable = 'page_speed'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

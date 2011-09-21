@@ -1,1 +1,1 @@
-require 'pagespeed'
+require 'page_speed'

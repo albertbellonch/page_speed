@@ -3,24 +3,24 @@
 
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'thor'
-require 'pagespeed'
+require 'page_speed'
 
-class PagespeedCLI < Thor
+class PageSpeedCLI < Thor
   # Mappings
   map "-V" => :version
 
   # Analyze
-  desc "analyze URL", "a Google's Pagespeed port"
+  desc "analyze URL", "a Google's Page Speed port"
   method_option :requests, :desc => "The first requests' number to analyze", :type => :numeric, :default => 0, :aliases => "-url"
   def analyze(url)
-    Pagespeed::analyze(url)
+    PageSpeed::analyze(url)
   end
 
   # Get version
   desc "version", "get the version"
   def version
-    puts Pagespeed::VERSION
+    puts PageSpeed::VERSION
   end
 end
 
-PagespeedCLI.start
+PageSpeedCLI.start
