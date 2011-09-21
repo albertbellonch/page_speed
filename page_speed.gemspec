@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Albert Bellonch"]
   s.email       = ["albert@itnig.net"]
-  s.homepage    = "itnig.net"
+  s.homepage    = "http://itnig.net"
   s.summary     = %q{A simple port for Google Page Speed's scores}
   s.description = %q{-}
 
