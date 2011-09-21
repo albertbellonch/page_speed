@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+$:.unshift(File.dirname(__FILE__) + '/../lib')
+require 'thor'
+require 'pagespeed'
+
+class PagespeedCLI < Thor
+  # Mappings
+  map "-V" => :version
+
+  # Analyze
+  desc "analyze URL", "a Google's Pagespeed port"
+  method_option :requests, :desc => "The first requests' number to analyze", :type => :numeric, :default => 0, :aliases => "-url"
+  def analyze(url)
+    Pagespeed::analyze(url)
+  end
+
+  # Get version
+  desc "version", "get the version"
+  def version
+    puts Pagespeed::VERSION
+  end
+end
+
+PagespeedCLI.start
