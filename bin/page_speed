@@ -2,25 +2,11 @@
 # encoding: utf-8
 
 $:.unshift(File.dirname(__FILE__) + '/../lib')
-require 'thor'
 require 'page_speed'
 
-class PageSpeedCLI < Thor
-  # Mappings
-  map "-V" => :version
-
-  # Analyze
-  desc "analyze URL", "a Google's Page Speed port"
-  method_option :requests, :desc => "The first requests' number to analyze", :type => :numeric, :default => 0, :aliases => "-url"
-  def analyze(url)
-    PageSpeed::analyze(url)
-  end
-
-  # Get version
-  desc "version", "get the version"
-  def version
-    puts PageSpeed::VERSION
-  end
+unless ARGV.length == 1 && URL = ARGV[0]
+  puts "There has been an error. Please check your URL."
+  exit
 end
 
-PageSpeedCLI.start
+PageSpeed::analyze(URL)
