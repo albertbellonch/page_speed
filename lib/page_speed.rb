@@ -18,9 +18,24 @@ module PageSpeed
 
         # Show results
         show_results(uri, desktop, mobile)
+      rescue URI::InvalidURIError
+        puts "Please check your URL and try again."
       rescue Exception
-        puts "There has been an error. Please check your URL."
+        puts "There has been an unexpected error."
       end
+    end
+
+    def help
+      version
+      usage
+    end
+
+    def version
+      puts "page_speed gem, version #{PageSpeed::VERSION}\n"
+    end
+
+    def usage
+      puts "usage: page_speed url | [ -v | --version ] | [ -h | --help ]"
     end
 
     private
@@ -30,30 +45,30 @@ module PageSpeed
         url = "http://#{url}"
       end
       uri = URI.parse(url)
-      uri.open
+      uri.open # ping URL; will raise a URI::InvalidURIError when failing
       uri
     end
 
-    def scores_for(uri, opts = {})
-      desktop = score_for(uri, true)
-      mobile = score_for(uri, false)
+    def scores_for(uri)
+      desktop = score_for(uri, :desktop => true)
+      mobile = score_for(uri, :desktop => false)
       [desktop, mobile]
     end
 
-    def score_for(uri, is_desktop)
-      json = api_request(uri, is_desktop)
+    def score_for(uri, opts)
+      json = api_request(uri, opts)
       parse_score(json)
     end
 
-    def api_request(uri, is_desktop)
-      # Get options
-      strategy =
+    def api_request(uri, opts = {})
+      # Merge options
+      opts = {:desktop => true}.merge(opts)
 
       # Get URL for API
       params = {}
       params["url"] = uri
       params["key"] = API_KEY
-      params["strategy"] = is_desktop ? "desktop" : "mobile"
+      params["strategy"] = opts[:desktop] ? "desktop" : "mobile"
       params_str = params.map{|k,v| "#{k}=#{v}" }.join("&")
 
       # Send request and return JSON

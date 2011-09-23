@@ -4,9 +4,18 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'page_speed'
 
-unless ARGV.length == 1 && URL = ARGV[0]
-  puts "There has been an error. Please check your URL."
-  exit
+case ARGV.length
+  when 1
+    arg1 = ARGV[0]
+    case arg1
+      when "-v", "--version"
+        PageSpeed::version
+      when "-h", "--help"
+        PageSpeed::help
+      else
+        PageSpeed::analyze(arg1)
+    end
+  else
+    puts "Please check your syntax.\n"
+    PageSpeed::help
 end
-
-PageSpeed::analyze(URL)
