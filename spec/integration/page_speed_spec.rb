@@ -79,12 +79,27 @@ describe PageSpeed do
 
       it "should have deleted the file where the API key is and ask for a new one" do
         @result = `bin/page_speed google.com`
-        @result.should include("PI key not set. Use the -k option to set the key.")
+        @result.should include("API key not set. Use the -k option to set the key.")
+      end
+
+      it "should have indeed deleted the file" do
+        @result = `bin/page_speed google.com`
+        File.exists?("/tmp/.page_speed").should == false
       end
     end
   end
 
   context "key" do
+    before do
+      @result = `bin/page_speed -k DO_THE_CUCA`
+    end
 
+    it "should be set and the user should get feedback" do
+      @result.should include("API key set.")
+    end
+
+    it "should be correctly set" do
+      PageSpeed::get_api_key.should == "DO_THE_CUCA"
+    end
   end
 end
