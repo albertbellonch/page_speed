@@ -17,7 +17,11 @@ Simply install the gem:
 Usage
 -----
 
-Just execute it against any website you can imagine:
+You have to get your API key first through [here](http://code.google.com/intl/en-EN/apis/pagespeedonline/v1/getting_started.html), then set it to the gem:
+
+    page_speed -k YOUR_KEY
+
+After that, just execute page_speed against any website you can imagine:
 
     page_speed URL
 
