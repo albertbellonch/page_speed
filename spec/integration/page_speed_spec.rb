@@ -1,6 +1,13 @@
 require 'spec_helper'
 
+ENV['page_speed_env'] = "test"
+API_KEY = "AIzaSyCT0PgAW-FjLF0Nfx81DqU6laCSiXkIHFs"
+
 describe PageSpeed do
+  before do
+    File.open("/tmp/.page_speed", 'w') {|f| f.write(API_KEY) } # Use a correct API KEY
+  end
+
   it "should point to help when no parameter is provided" do
     result = `bin/page_speed`
     result.should include("Please check your syntax")
@@ -51,5 +58,33 @@ describe PageSpeed do
       result = `bin/page_speed www.facebook.com`
       result.should include("Google Page Speed for http://www.facebook.com: 99 (Desktop) / 99 (Mobile)")
     end
+  end
+
+  context "API key control" do
+    it "should prompt the API key when is not found" do
+      File.delete("/tmp/.page_speed")
+      result = `bin/page_speed google.com`
+      result.should include("PI key not set. Use the -k option to set the key.")
+    end
+
+    context "when API key is corrupted" do
+      before do
+        File.open("/tmp/.page_speed", 'w') {|f| f.write(API_KEY.chop) } # Use a corrupt API KEY
+        @result = `bin/page_speed google.com`
+      end
+
+      it "should prompt about it" do
+        @result.should include("The API you used is not correct.")
+      end
+
+      it "should have deleted the file where the API key is and ask for a new one" do
+        @result = `bin/page_speed google.com`
+        @result.should include("PI key not set. Use the -k option to set the key.")
+      end
+    end
+  end
+
+  context "key" do
+
   end
 end

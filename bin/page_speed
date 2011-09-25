@@ -4,6 +4,22 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'page_speed'
 
+if ARGV.length == 2
+  arg1, api_key = ARGV[0..1]
+  if arg1 == "-k"
+    PageSpeed::set_api_key(api_key)
+    puts "API key set."
+    exit
+  end
+end
+
+unless PageSpeed::api_key_exists?
+  puts "API key not set. Use the -k option to set the key."
+  puts ""
+  PageSpeed::help
+  exit
+end
+
 case ARGV.length
   when 1
     arg1 = ARGV[0]

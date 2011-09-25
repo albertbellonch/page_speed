@@ -3,7 +3,6 @@ require "page_speed/version"
 require 'json'
 require 'open-uri'
 
-API_KEY = "AIzaSyB-WW7oKAfD0T9cLGMufjiWA1mtLwDd4hg"
 API_URL = "https://www.googleapis.com/pagespeedonline/v1/runPagespeed"
 
 module PageSpeed
@@ -18,10 +17,20 @@ module PageSpeed
 
         # Show results
         show_results(uri, desktop, mobile)
+
       rescue URI::InvalidURIError
         puts "Please check your URL and try again."
-      rescue Exception
-        puts "There has been an unexpected error."
+
+      rescue OpenURI::HTTPError
+        puts "The API you used is not correct. Use the -k option to replace it."
+        puts ""
+        reset_api_key
+        help
+
+      rescue Exception => e
+        puts "There has been an unexpected error:"
+        puts e.message
+        puts e.backtrace.inspect
       end
     end
 
@@ -35,7 +44,28 @@ module PageSpeed
     end
 
     def usage
-      puts "usage: page_speed url | [ -v | --version ] | [ -h | --help ]"
+      puts "usage: page_speed url | [ -k key | --key key ] | [ -v | --version ] | [ -h | --help ]"
+      puts "You can get your key at http://code.google.com/intl/en-EN/apis/pagespeedonline/v1/getting_started.html"
+    end
+
+    def set_api_key(key)
+      File.open(api_key_path, "w") {|f| f.write(key) }
+    end
+
+    def get_api_key
+      file = File.new(api_key_path, "r")
+      api_key = file.gets
+      file.close
+      api_key
+    end
+
+    def api_key_exists?
+      begin
+        get_api_key
+        true
+      rescue Exception
+        false
+      end
     end
 
     private
@@ -67,7 +97,7 @@ module PageSpeed
       # Get URL for API
       params = {}
       params["url"] = uri
-      params["key"] = API_KEY
+      params["key"] = get_api_key
       params["strategy"] = opts[:desktop] ? "desktop" : "mobile"
       params_str = params.map{|k,v| "#{k}=#{v}" }.join("&")
 
@@ -83,6 +113,19 @@ module PageSpeed
 
     def show_results(url, desktop, mobile)
       puts "Google Page Speed for #{url}: #{desktop} (Desktop) / #{mobile} (Mobile)"
+    end
+
+    def reset_api_key
+      File.delete(api_key_path)
+    end
+
+    def api_key_path
+      dir = testing ? "/tmp" : File.expand_path("~")
+      dir + "/.page_speed"
+    end
+
+    def testing
+      ! defined?(ENV['page_speed_env']).nil? && ENV['page_speed_env'] == "test"
     end
   end
 end
