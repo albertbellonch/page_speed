@@ -1,7 +1,9 @@
 require "page_speed/version"
 
-require 'json'
 require 'open-uri'
+unless defined?(::JSON::JSON_LOADED) and ::JSON::JSON_LOADED
+  require 'json'
+end
 
 API_URL = "https://www.googleapis.com/pagespeedonline/v1/runPagespeed"
 
