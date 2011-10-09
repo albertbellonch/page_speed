@@ -1,11 +1,12 @@
 require 'spec_helper'
 
-ENV['page_speed_env'] = "test"
 API_KEY = "AIzaSyCT0PgAW-FjLF0Nfx81DqU6laCSiXkIHFs"
+TMP_FILE = "/tmp/.page_speed"
 
 describe PageSpeed do
   before do
-    File.open("/tmp/.page_speed", 'w') {|f| f.write(API_KEY) } # Use a correct API KEY
+    ENV["TESTING"] = "TRUE"
+    File.open(TMP_FILE, 'w') {|f| f.write(API_KEY) } # Use a correct API KEY
   end
 
   it "should point to help when no parameter is provided" do
@@ -51,7 +52,7 @@ describe PageSpeed do
 
     it "should success with a URL without www" do
       result = `bin/page_speed google.com`
-      result.should include("Google Page Speed for http://google.com: 98 (Desktop) / 96 (Mobile)")
+      result.should include("Google Page Speed for http://google.com: 98 (Desktop) / 97 (Mobile)")
     end
 
     it "should success with a URL with www" do
@@ -62,14 +63,14 @@ describe PageSpeed do
 
   context "API key control" do
     it "should prompt the API key when is not found" do
-      File.delete("/tmp/.page_speed")
+      File.delete(TMP_FILE)
       result = `bin/page_speed google.com`
       result.should include("PI key not set. Use the -k option to set the key.")
     end
 
     context "when API key is corrupted" do
       before do
-        File.open("/tmp/.page_speed", 'w') {|f| f.write(API_KEY.chop) } # Use a corrupt API KEY
+        File.open(TMP_FILE, 'w') {|f| f.write(API_KEY.chop) } # Use a corrupt API KEY
         @result = `bin/page_speed google.com`
       end
 
@@ -84,7 +85,7 @@ describe PageSpeed do
 
       it "should have indeed deleted the file" do
         @result = `bin/page_speed google.com`
-        File.exists?("/tmp/.page_speed").should == false
+        File.exists?(TMP_FILE).should == false
       end
     end
   end
@@ -101,5 +102,9 @@ describe PageSpeed do
     it "should be correctly set" do
       PageSpeed::get_api_key.should == "DO_THE_CUCA"
     end
+  end
+
+  after :all do
+    File.delete(TMP_FILE)
   end
 end

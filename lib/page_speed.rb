@@ -23,7 +23,6 @@ module PageSpeed
 
       rescue OpenURI::HTTPError
         puts "The API you used is not correct. Use the -k option to replace it."
-        puts ""
         reset_api_key
         help
 
@@ -63,7 +62,8 @@ module PageSpeed
       begin
         get_api_key
         true
-      rescue Exception
+      rescue Exception => e
+        p e
         false
       end
     end
@@ -120,12 +120,8 @@ module PageSpeed
     end
 
     def api_key_path
-      dir = testing ? "/tmp" : File.expand_path("~")
-      dir + "/.page_speed"
-    end
-
-    def testing
-      ! defined?(ENV['page_speed_env']).nil? && ENV['page_speed_env'] == "test"
+      folder = ENV["TESTING"] ? "/tmp" : "~"
+      File.expand_path("#{folder}/.page_speed")
     end
   end
 end
