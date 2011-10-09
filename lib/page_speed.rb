@@ -3,6 +3,15 @@ require "page_speed/version"
 require 'open-uri'
 require 'json' unless defined?(::JSON::JSON_LOADED) and ::JSON::JSON_LOADED
 
+# Hack that allows us to avoid certification validations in Ruby Enterprise Editions
+require 'openssl'
+module OpenSSL
+  module SSL
+    remove_const :VERIFY_PEER
+  end
+end
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
 API_URL = "https://www.googleapis.com/pagespeedonline/v1/runPagespeed"
 
 module PageSpeed
