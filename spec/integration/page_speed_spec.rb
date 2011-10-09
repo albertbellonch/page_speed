@@ -104,7 +104,7 @@ describe PageSpeed do
     end
   end
 
-  after :all do
-    File.delete(TMP_FILE)
+  after do
+    File.delete(TMP_FILE) if File.exists?(TMP_FILE)
   end
 end
