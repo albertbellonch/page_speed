@@ -7,6 +7,8 @@ Description
 PageSpeed is a simple gem which ports Google Page Speed's scores to your
 command line.
 
+[![Build Status](https://secure.travis-ci.org/albertbellonch/page_speed.png)](http://travis-ci.org/albertbellonch/page_speed)
+
 Installation
 ------------
 
