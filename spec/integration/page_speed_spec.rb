@@ -52,7 +52,7 @@ describe PageSpeed do
 
     it "should success with a URL without www" do
       result = `bin/page_speed google.com`
-      result.should include("Google Page Speed for http://google.com: 98 (Desktop) / 97 (Mobile)")
+      result.should include("Google Page Speed for http://google.com: 96 (Desktop) / 97 (Mobile)")
     end
 
     it "should success with a URL with www" do
